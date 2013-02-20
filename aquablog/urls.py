@@ -25,7 +25,23 @@ urlpatterns = patterns(
     url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
-)
+    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'registration/login.html'}),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/login/'}),
+    url(r'^signup/$', 'aquablog.views.signup', {'template_name': 'registration/signup_form.html', 'email_template_name': 'registration/signup_email.html'}),
+    url(r'^signup/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'aquablog.views.signup_confirm'),
+    url(r'^signup/complete/$', 'aquablog.views.signup_complete', {'template_name': 'registration/signup_complete.html'}),
+    url(r'^signup/done/$', 'aquablog.views.signup_done', {'template_name': 'registration/signup_done.html'}),
+
+    url(r'^password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'registration/password_change_form.html'}),
+    url(r'^password_change/done/$', 'django.contrib.auth.views.password_change_done', {'template_name': 'registration/password_change_done.html'}),
+ )
+
+'''
+url(r'^password_reset/$', 'django.contrib.auth.views.password_reset', {'template_name': 'registration/password_reset_form.html', 'email_template_name': 'registration/password_reset_email.html'}),
+url(r'^password_reset/done/$', 'django.contrib.auth.views.password_reset_done', {'template_name': 'registration/password_reset_done.html'}),
+url(r'^reset/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$', 'django.contrib.auth.views.password_reset_confirm', {'template_name': 'registration/password_reset_confirm.html'}),
+url(r'^reset/done/$', 'django.contrib.auth.views.password_reset_complete', {'template_name': 'registration/password_reset_complete.html'}),
+'''
 
 sitemaps = {
     'tags': TagSitemap,

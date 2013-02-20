@@ -18,6 +18,14 @@ MEDIA_URL = '/media/'
 
 SECRET_KEY = 'jo-1rzm(%sf)3#n+fb7h955yu$3(pt63abhi12_t7e^^5q8dyw'
 
+ACCOUNT_ACTIVATION_DAYS = 7
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = 'andrey.galimshyn@gmail.com'
+EMAIL_HOST_PASSWORD = '1Heckfyjdf'
+EMAIL_USE_TLS = True
+
 USE_TZ = True
 USE_I18N = True
 USE_L10N = True
@@ -58,6 +66,11 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'aquablog.urls'
+TEMPLATE_DIRS = (
+    'D:/Projects/tech_forum/aquablog/aquablog/templates'
+)
+LOGIN_REDIRECT_URL = '/blog/'
+
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -80,6 +93,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.staticfiles',
+    'registration',
     'mptt',
     'zinnia',
     'tagging',
