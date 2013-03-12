@@ -1,5 +1,6 @@
 """Settings for Zinnia Aquablog"""
 import os
+PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 
 gettext = lambda s: s
 
@@ -14,7 +15,10 @@ TIME_ZONE = 'Europe/Paris'
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
+
+AUTH_PROFILE_MODULE = 'aquablog.UserProfile'
 
 SECRET_KEY = 'jo-1rzm(%sf)3#n+fb7h955yu$3(pt63abhi12_t7e^^5q8dyw'
 
@@ -98,6 +102,7 @@ INSTALLED_APPS = (
     'zinnia',
     'tagging',
     'django_xmlrpc',
+    'aquablog',
 )
 
 from zinnia.xmlrpc import ZINNIA_XMLRPC_METHODS

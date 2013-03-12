@@ -5,6 +5,7 @@ from django.utils.http import int_to_base36
 from django.template import Context, loader
 from django import forms
 from django.core.mail import send_mail
+from models import *
 
 class UserCreationForm(forms.ModelForm):
     username = forms.RegexField(label="Username", max_length=30, regex=r'^[\w.@+-]+$',
@@ -71,3 +72,15 @@ class UserCreationForm(forms.ModelForm):
         #temporary turn off
         #send_mail("Confirmation link sent on %s" % site_name, t.render(Context(c)), 'peyman.gohari@gmail.com', [user.email])
         return user
+
+from PIL import Image as PImage
+from os.path import join as pjoin
+
+class ProfileForm(forms.Form):
+    avatar = forms.ImageField(label="Profile Pic", help_text='select profile picture')
+
+class DocumentForm(forms.Form):
+    docfile = forms.FileField(
+        label='Select a file',
+        help_text='max. 42 megabytes'
+    )

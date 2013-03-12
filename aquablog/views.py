@@ -4,7 +4,8 @@ from django.template import loader
 from django.template import Context
 from django.http import HttpResponseServerError
 from django.contrib.auth import authenticate, login
-from aquablog.forms import UserCreationForm
+from aquablog.forms import UserCreationForm, ProfileForm
+from aquablog.models import UserProfile
 from django.contrib.auth.tokens import default_token_generator
 from django.template import RequestContext
 from django.contrib.auth.models import User
@@ -13,6 +14,11 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.core.urlresolvers import reverse
 from django.utils.http import urlquote, base36_to_int
 from django.contrib.sites.models import Site
+from os.path import join as pjoin
+from PIL import Image as PImage
+
+from aquablog.forms import DocumentForm
+from aquablog.models import Document
 
 def server_error(request, template_name='500.html'):
     """
@@ -79,3 +85,59 @@ def signup_complete(request, template_name='registration/signup_complete.html'):
     return render_to_response(template_name, 
                               context_instance=RequestContext(request, 
                                                               {'login_url': settings.LOGIN_URL}))
+
+#@login_required
+def profile(request, pk):
+    """Edit user profile."""
+    try:
+        profile = UserProfile.objects.get(user=pk)
+    except :
+        profile = UserProfile(user=request.user)
+        profile.save() 
+
+    img = None
+    pf = None
+
+    if request.method == "POST":
+        pf = ProfileForm(request.POST, request.FILES)
+        if pf.is_valid():
+            profile.avatar = request.FILES['avatar']
+            profile.save()
+            # resize and save image under same filename
+            if not profile.avatar.name :
+                profile.avatar.name = '/images/avatar.jpg'
+            imfn = pjoin(settings.MEDIA_ROOT, profile.avatar.name)
+            im = PImage.open(imfn)
+            im.thumbnail((160,160), PImage.ANTIALIAS)
+            im.save(imfn, "JPEG")
+    else:
+        pf = ProfileForm()
+
+    if profile.avatar:
+        img = pjoin(settings.MEDIA_URL, profile.avatar.name)
+    return render_to_response("profile_list.html", {'pf':pf, 'img': img}, context_instance=RequestContext(request))
+
+
+
+def list(request):
+    # Handle file upload
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            newdoc = Document(docfile = request.FILES['docfile'])
+            newdoc.save()
+
+            # Redirect to the document list after POST
+            return HttpResponseRedirect(reverse('aquablog.views.list'))
+    else:
+        form = DocumentForm() # A empty, unbound form
+
+    # Load documents for the list page
+    documents = Document.objects.all()
+
+    # Render list page with the documents and the form
+    return render_to_response(
+        'list.html',
+        {'documents': documents, 'form': form},
+        context_instance=RequestContext(request)
+    )

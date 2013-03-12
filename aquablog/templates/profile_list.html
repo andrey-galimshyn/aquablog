@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Minimal Django File Upload Example</title>   
+    </head>
+    <body>
+    <!-- List of uploaded documents -->
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="{% url aquablog.views.profile user.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if img %} <p><img border="0" alt="Profile Pic" src="{{ img }}" /></p> {% endif %}
+            <p>{{ pf.non_field_errors }}</p>
+            <p>{{ pf.avatar.label_tag }} {{ pf.avatar.help_text }}</p>
+            <p>
+                {{ pf.avatar.errors }}
+                {{ pf.avatar }}
+            </p>
+            <p><input type="submit" value="Upload" /></p>
+        </form>
+    </body>
+</html> 

@@ -55,6 +55,7 @@
               <p>
                   Logged as: {{ user.username }}.
                   <a href="http://{{ request.get_host }}/logout"> Logout.</a>
+                  {{ user.pk }} Edit profile
               </p>
           {% else %}
               <p>Welcome, new user. Please 
