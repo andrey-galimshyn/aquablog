@@ -53,9 +53,10 @@
         <blockquote>
           {% if user.is_authenticated %}
               <p>
-                  Logged as: {{ user.username }}.
-                  <a href="http://{{ request.get_host }}/logout"> Logout.</a>
-                  {{ user.pk }} Edit profile
+                  Logged as: {{ user.username }} 
+                  <img border="2" alt="Profile Pic" src="/media/{{ user.get_profile.avatar.name }}" height="42" />
+                  <a href="http://{{ request.get_host }}/logout"> Logout </a> |
+                  <a href="http://{{ request.get_host }}/profile/{{ user.pk }}"> Edit profile </a>
               </p>
           {% else %}
               <p>Welcome, new user. Please 

@@ -108,14 +108,14 @@ def profile(request, pk):
                 profile.avatar.name = '/images/avatar.jpg'
             imfn = pjoin(settings.MEDIA_ROOT, profile.avatar.name)
             im = PImage.open(imfn)
-            im.thumbnail((160,160), PImage.ANTIALIAS)
+            im.thumbnail((85,85), PImage.ANTIALIAS)
             im.save(imfn, "JPEG")
     else:
         pf = ProfileForm()
 
     if profile.avatar:
         img = pjoin(settings.MEDIA_URL, profile.avatar.name)
-    return render_to_response("profile_list.html", {'pf':pf, 'img': img}, context_instance=RequestContext(request))
+    return render_to_response("profile.html", {'pf':pf, 'img': img}, context_instance=RequestContext(request))
 
 
 
