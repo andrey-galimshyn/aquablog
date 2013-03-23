@@ -99,19 +99,32 @@ def profile(request, pk):
     pf = None
 
     if request.method == "POST":
-        pf = ProfileForm(request.POST, request.FILES)
+        pf = ProfileForm(user=request.user, data=request.POST)
+        #pf = ProfileForm(request.POST, request.FILES)
         if pf.is_valid():
-            profile.avatar = request.FILES['avatar']
-            profile.save()
+            local_avatar = request.FILES['avatar']
+            #print request.POST['categories']
+            cats = request.POST.getlist('categories')
+            print '1 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
+            #pf.bla
             # resize and save image under same filename
-            if not profile.avatar.name :
-                profile.avatar.name = '/images/avatar.jpg'
-            imfn = pjoin(settings.MEDIA_ROOT, profile.avatar.name)
-            im = PImage.open(imfn)
-            im.thumbnail((85,85), PImage.ANTIALIAS)
-            im.save(imfn, "JPEG")
+            if local_avatar :
+                profile.categories.clear()
+                profile.avatar = local_avatar
+                print '2 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
+                print cats
+                print '3 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
+                for c in cats:
+                    print 'waaaaaas'
+                    profile.categories.add(c)
+                profile.save()
+                imfn = pjoin(settings.MEDIA_ROOT, profile.avatar.name)
+                im = PImage.open(imfn)
+                im.thumbnail((85,85), PImage.ANTIALIAS)
+                im.save(imfn, "JPEG")
     else:
-        pf = ProfileForm()
+        pf = ProfileForm(user=request.user)
+        #pf = ProfileForm()
 
     if profile.avatar:
         img = pjoin(settings.MEDIA_URL, profile.avatar.name)

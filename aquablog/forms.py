@@ -6,6 +6,9 @@ from django.template import Context, loader
 from django import forms
 from django.core.mail import send_mail
 from models import *
+from zinnia.models import *
+from django.forms.fields import DateField, ChoiceField, MultipleChoiceField
+from django.forms.widgets import RadioSelect, CheckboxSelectMultiple
 
 class UserCreationForm(forms.ModelForm):
     username = forms.RegexField(label="Username", max_length=30, regex=r'^[\w.@+-]+$',
@@ -76,8 +79,20 @@ class UserCreationForm(forms.ModelForm):
 from PIL import Image as PImage
 from os.path import join as pjoin
 
+FAVORITE_COLORS_CHOICES = [['blue', 'Blue'],['green', 'Green'],['black', 'Black']]
+
 class ProfileForm(forms.Form):
-    avatar = forms.ImageField(label="Profile Pic", help_text='select profile picture')
+    avatar = forms.ImageField(label="Profile Pic", help_text='select profile picture', required=False)
+    #bla = forms.forms.CharField(label="Password")
+    categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
+    #cobj_vals = [[cob.id, cob.title] for cob in Category.objects.all() ]
+    #categories = forms.MultipleChoiceField(required=False, widget=CheckboxSelectMultiple, choices=cobj_vals)
+    def __init__(self, user=None, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self._user = user
+        reg_user_prof = UserProfile.objects.get(user=self._user)
+        self.fields['categories'].initial = [c.pk for c in reg_user_prof.categories.all()]
+        #self.fields['avatar'] = reg_user_prof.avatar
 
 class DocumentForm(forms.Form):
     docfile = forms.FileField(

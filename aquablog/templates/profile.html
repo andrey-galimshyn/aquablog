@@ -6,6 +6,8 @@
         <!-- Upload form. Note enctype attribute! -->
         <form action="{% url aquablog.views.profile user.pk %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            {{pf.categories}}
+            {% csrf_token %}
             {% if img %} <p><img border="0" alt="Profile Pic" src="{{ img }}" /></p> {% endif %}
             <p>{{ pf.non_field_errors }}</p>
             <p>{{ pf.avatar.label_tag }} {{ pf.avatar.help_text }}</p>
