@@ -102,26 +102,26 @@ def profile(request, pk):
         pf = ProfileForm(user=request.user, data=request.POST)
         #pf = ProfileForm(request.POST, request.FILES)
         if pf.is_valid():
-            local_avatar = request.FILES['avatar']
+            local_avatar = None
+            try:
+                local_avatar = request.FILES['avatar']
+            except KeyError:
+                pass
             #print request.POST['categories']
             cats = request.POST.getlist('categories')
-            print '1 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
             #pf.bla
             # resize and save image under same filename
             if local_avatar :
-                profile.categories.clear()
                 profile.avatar = local_avatar
-                print '2 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
-                print cats
-                print '3 kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk'
-                for c in cats:
-                    print 'waaaaaas'
-                    profile.categories.add(c)
-                profile.save()
                 imfn = pjoin(settings.MEDIA_ROOT, profile.avatar.name)
                 im = PImage.open(imfn)
                 im.thumbnail((85,85), PImage.ANTIALIAS)
                 im.save(imfn, "JPEG")
+            profile.categories.clear()
+            for c in cats:
+                profile.categories.add(c)
+            profile.save()
+
     else:
         pf = ProfileForm(user=request.user)
         #pf = ProfileForm()
