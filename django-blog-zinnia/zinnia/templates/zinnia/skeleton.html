@@ -71,25 +71,6 @@
       {% block slider %}{% endblock %}
       <div id="content" class="hfeed">
         {% block content %}
-        <div class="links">
-          <h3>{% trans "Useful links" %}</h3>
-          <ul>
-            <li>
-              <a href="{% url 'zinnia_entry_archive_index' %}" title="{% trans "Blog index" %}">
-                {% trans "Blog index" %}
-              </a>
-            </li>
-            <li>
-              <a href="{% url 'zinnia_sitemap' %}" title="{% trans "Sitemap" %}">
-                {% trans "Sitemap" %}
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="search">
-          <h3>{% trans "Search" %}</h3>
-          {% include "zinnia/tags/search_form.html" %}
-        </div>
         {% endblock %}
       </div>
       <div id="sidebar">
