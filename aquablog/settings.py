@@ -40,6 +40,9 @@ LANGUAGE_CODE = 'en'
 
 LANGUAGES = (
     ('en', gettext('English')),
+)
+
+'''
     ('fr', gettext('French')),
     ('de', gettext('German')),
     ('es', gettext('Spanish')),
@@ -57,7 +60,7 @@ LANGUAGES = (
     ('pt_BR', gettext('Brazilian Portuguese')),
     ('fi_FI', gettext('Finnish (Finland)')),
     ('zh_CN', gettext('Simplified Chinese')),
-)
+'''
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
