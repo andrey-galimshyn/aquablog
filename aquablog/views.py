@@ -104,6 +104,8 @@ def signup_complete(request, template_name='registration/signup_complete.html'):
 def profile(request, pk):
     """Edit user profile."""
     try:
+        if int(pk) != request.user.id:
+           return HttpResponseRedirect(settings.LOGIN_URL)
         profile = UserProfile.objects.get(user=pk)
     except :
         profile = UserProfile(user=request.user)
