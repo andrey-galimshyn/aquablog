@@ -32,7 +32,6 @@ urlpatterns = patterns(
     url(r'^signup/complete/$', 'aquablog.views.signup_complete', {'template_name': 'registration/signup_complete.html'}),
     url(r'^signup/done/$', 'aquablog.views.signup_done', {'template_name': 'registration/signup_done.html'}),
     url(r"^profile/(\d+)/$", "aquablog.views.profile"),
-    url(r'^list/$', 'aquablog.views.list', name='list'),
 
     url(r'^password_change/$', 'django.contrib.auth.views.password_change', {'template_name': 'registration/password_change_form.html'}),
     url(r'^password_change/done/$', 'django.contrib.auth.views.password_change_done', {'template_name': 'registration/password_change_done.html'}),

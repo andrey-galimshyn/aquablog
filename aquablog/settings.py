@@ -77,7 +77,7 @@ TEMPLATE_DIRS = (
     'D:/Projects/tech_forum/aquablog/aquablog/templates'
 )
 LOGIN_REDIRECT_URL = '/blog/'
-
+LOGIN_URL = 'http://127.0.0.1:8000/login'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',

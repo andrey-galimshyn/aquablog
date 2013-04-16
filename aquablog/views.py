@@ -16,9 +16,23 @@ from django.utils.http import urlquote, base36_to_int
 from django.contrib.sites.models import Site
 from os.path import join as pjoin
 from PIL import Image as PImage
+from django.contrib.auth.decorators import login_required
 
 from aquablog.forms import DocumentForm
 from aquablog.models import Document
+
+#the decorator
+'''
+def custom_login_required(f):
+        def wrap(request, *args, **kwargs):
+                #this check the session if userid key exist, if not it will redirect to login page
+                if not request.user.is_authenticated():
+                        return HttpResponseRedirect(settings.LOGIN_URL)
+                return f(request, *args, **kwargs)
+        wrap.__doc__=f.__doc__
+        wrap.__name__=f.__name__
+        return wrap
+'''
 
 def server_error(request, template_name='500.html'):
     """
@@ -86,7 +100,7 @@ def signup_complete(request, template_name='registration/signup_complete.html'):
                               context_instance=RequestContext(request, 
                                                               {'login_url': settings.LOGIN_URL}))
 
-#@login_required
+@login_required
 def profile(request, pk):
     """Edit user profile."""
     try:
@@ -129,28 +143,3 @@ def profile(request, pk):
     if profile.avatar:
         img = pjoin(settings.MEDIA_URL, profile.avatar.name)
     return render_to_response("profile.html", {'pf':pf, 'img': img}, context_instance=RequestContext(request))
-
-
-
-def list(request):
-    # Handle file upload
-    if request.method == 'POST':
-        form = DocumentForm(request.POST, request.FILES)
-        if form.is_valid():
-            newdoc = Document(docfile = request.FILES['docfile'])
-            newdoc.save()
-
-            # Redirect to the document list after POST
-            return HttpResponseRedirect(reverse('aquablog.views.list'))
-    else:
-        form = DocumentForm() # A empty, unbound form
-
-    # Load documents for the list page
-    documents = Document.objects.all()
-
-    # Render list page with the documents and the form
-    return render_to_response(
-        'list.html',
-        {'documents': documents, 'form': form},
-        context_instance=RequestContext(request)
-    )
