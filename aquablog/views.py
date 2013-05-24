@@ -18,6 +18,10 @@ from os.path import join as pjoin
 from PIL import Image as PImage
 from django.contrib.auth.decorators import login_required
 
+import os
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
 from aquablog.forms import DocumentForm
 from aquablog.models import Document
 
@@ -116,20 +120,25 @@ def profile(request, pk):
 
     if request.method == "POST":
         pf = ProfileForm(user=request.user, data=request.POST)
-        #pf = ProfileForm(request.POST, request.FILES)
         if pf.is_valid():
             local_avatar = None
             try:
                 local_avatar = request.FILES['avatar']
+                print type(local_avatar)
             except KeyError:
                 pass
             #print request.POST['categories']
             cats = request.POST.getlist('categories')
-            #pf.bla
             # resize and save image under same filename
             if local_avatar :
+
+                #data = request.FILES['image'] # or self.files['image'] in your form
+
+                path = default_storage.save('tmp/somename.tmp', ContentFile(local_avatar.read()))
+                imfn = os.path.join(settings.MEDIA_ROOT, path)
+
                 profile.avatar = local_avatar
-                imfn = pjoin(settings.MEDIA_ROOT, profile.avatar.name)
+                #imfn = pjoin(settings.MEDIA_ROOT+'\\images', profile.avatar.name)
                 im = PImage.open(imfn)
                 im.thumbnail((85,85), PImage.ANTIALIAS)
                 im.save(imfn, "JPEG")

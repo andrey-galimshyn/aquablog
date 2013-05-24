@@ -302,6 +302,7 @@ def get_gravatar(email, size=80, rating='g', default=None,
         options['d'] = default
 
     url = '%s?%s' % (url, urlencode(options))
+    print '------------------- You are my baby blue: ',url  
     return url.replace('&', '&amp;')
 
 

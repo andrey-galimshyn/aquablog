@@ -94,8 +94,8 @@
     {% for comment in comment_list %}
     <li id="comment-{{ comment.pk }}-by-{{ comment.user_name|slugify }}"
         class="comment vcard {% cycle box1,box2 %}{% if comment.user %} authenticated-comment{% if comment.user.is_staff %} staff-comment{% endif %}{% if comment.user.is_superuser %} superuser-comment{% endif %}{% endif %}">
-      <img src="{% get_gravatar comment.email 60 "G" %}"
-           class="gravatar photo" alt="{{ comment.name }}" />
+      <!--<img src="{% get_gravatar comment.email 60 "G" %}" class="gravatar photo" alt="{{ comment.name }}" />-->
+      <img border="2" alt="Profile Pic" src="/media/{{ comment.user.get_profile.avatar.name }}" height="42" />
       <p class="comment-info">
 	{% if comment.url %}
 	<a href="{{ comment.url }}" rel="external nofollow"

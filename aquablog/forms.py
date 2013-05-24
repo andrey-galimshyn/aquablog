@@ -83,16 +83,12 @@ FAVORITE_COLORS_CHOICES = [['blue', 'Blue'],['green', 'Green'],['black', 'Black'
 
 class ProfileForm(forms.Form):
     avatar = forms.ImageField(label="Profile Pic", help_text='select profile picture', required=False)
-    #bla = forms.forms.CharField(label="Password")
     categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple(), required=False)
-    #cobj_vals = [[cob.id, cob.title] for cob in Category.objects.all() ]
-    #categories = forms.MultipleChoiceField(required=False, widget=CheckboxSelectMultiple, choices=cobj_vals)
     def __init__(self, user=None, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self._user = user
         reg_user_prof = UserProfile.objects.get(user=self._user)
         self.fields['categories'].initial = [c.pk for c in reg_user_prof.categories.all()]
-        #self.fields['avatar'] = reg_user_prof.avatar
 
 class DocumentForm(forms.Form):
     docfile = forms.FileField(
